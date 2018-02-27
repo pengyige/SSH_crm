@@ -1,0 +1,17 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">  
+<hibernate-mapping >  
+ 	<class name="cn.pengyi.entity.Visit">
+ 		<id name="vid" column="vid">
+ 			<generator class="native"></generator>
+ 		</id>
+ 		
+ 		<property name="vaddress" column="vaddress"></property>
+ 		<property name="vcontent" column="vcontent"></property>
+ 		
+ 		<!-- 拜访对用户 多对1 -->
+ 		<many-to-one name="user" class="cn.pengyi.entity.User" column="uvid"></many-to-one>
+ 		
+ 		<!-- 拜访对客户 多对一 -->
+ 		<many-to-one name="customer" class="cn.pengyi.entity.Customer" column="cvid"></many-to-one>
+ 	</class>
+</hibernate-mapping>

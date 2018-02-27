@@ -1,0 +1,27 @@
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">  
+<hibernate-mapping >  
+    <class name="cn.pengyi.entity.Customer" table="customer" >  
+        <id name="cid" >  
+            <generator class="increment" />
+        </id>  
+      <property name="custName"></property>
+        <property name="custLevel"></property>
+        <property name="custSource"></property>
+         <property name="custPhone"></property>
+          <property name="custMobile"></property>
+          
+          
+          <!-- 建立映射关系 -->
+          <set name="setLinkMan" inverse="false" >
+          	<key column="clid"></key>
+          	<one-to-many class="cn.pengyi.entity.LinkMan"/>
+          </set>
+          
+          <!-- 客户对拜访 一对多 -->
+          <set name="setCustomerVisit">
+          	<key column="cvid"></key>
+          	<one-to-many class="cn.pengyi.entity.Visit"/>
+          </set>
+    </class>  
+</hibernate-mapping>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.springframework.org/schema/beans"
+   xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:context="http://www.springframework.org/schema/context" 
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+     <context:component-scan base-package="cn.pengyi..*"/> 
+
+     <!-- 整合hibernate -->
+       <!-- 配置和连接池 -->
+       <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+     	<property name="driverClass" value="com.mysql.jdbc.Driver" />
+     	<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/sshcrm"/>
+     	<property name="user" value="root"/>
+     	<property name="password" value="admin"/>
+     </bean>
+		
+		<!-- sessionFactory对象创建 --> 
+		<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+			<property name="dataSource" ref="dataSource"></property>
+		    <property name="configLocations" value="classpath:hibernate.cfg.xml"></property> 
+		</bean>
+		
+		
+	<!-- 事务配置 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+		
+	<!-- 使用事务注解 -->	
+	<tx:annotation-driven transaction-manager="transactionManager"/>	
+		
+	<!-- service bean -->
+<!--  	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>  -->
+	
+	<bean id="userDaoImpl" class="cn.pengyi.dao.UserDaoImpl">
+		<!-- 使用继承的HiberanteSupport 内部自动创建了一个hibernateTemplate-->
+		<!--  <property name="hibernateTemplate" ref="hibernateTemplate"></property>  -->
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="userService" class="cn.pengyi.service.UserService">
+		<property name="userDao" ref="userDaoImpl"></property>
+	</bean>
+	
+	<!-- 整合 strust-->
+     <bean id="userAction" class="cn.pengyi.action.UserAction" scope="prototype">
+     		<property name="userService" ref="userService"></property>
+     </bean>
+     
+     
+   <import resource="classpath:customer.xml"/> 
+   <import resource="classpath:linkman.xml"/>
+   <import resource="classpath:visit.xml"/>
+     
+</beans>

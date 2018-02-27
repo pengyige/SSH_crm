@@ -1,0 +1,19 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">  
+<hibernate-mapping >  
+	<class name="cn.pengyi.entity.LinkMan" >
+		<id name="linkid">
+			<generator class="native"></generator>
+		</id>
+		
+		<property name="lkmName" ></property>
+		<property name="lkmGender" ></property>
+		<property name="lkmPhone" ></property>
+		<property name="lkmMobile" ></property>
+		
+		
+		<!-- 多的一方，联系人所属用户 -->
+		<many-to-one name="customer" class="cn.pengyi.entity.Customer" column="clid"></many-to-one>
+	</class> 
+</hibernate-mapping>
+
+
